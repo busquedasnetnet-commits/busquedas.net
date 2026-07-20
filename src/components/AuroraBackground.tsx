@@ -25,10 +25,6 @@ export default function AuroraBackground() {
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
     let width = 0;
     let height = 0;
     let dpr = 1;
@@ -36,11 +32,11 @@ export default function AuroraBackground() {
     let blobs: Blob[] = [];
 
     const colors = [
-      "rgba(80, 150, 255, 0.55)",
-      "rgba(56, 189, 248, 0.5)",
-      "rgba(147, 197, 253, 0.55)",
-      "rgba(125, 211, 252, 0.45)",
-      "rgba(96, 165, 250, 0.5)",
+      "rgba(56, 140, 255, 0.72)",
+      "rgba(14, 165, 233, 0.65)",
+      "rgba(96, 165, 250, 0.7)",
+      "rgba(34, 211, 238, 0.55)",
+      "rgba(59, 130, 246, 0.62)",
     ];
 
     const resize = () => {
@@ -53,16 +49,18 @@ export default function AuroraBackground() {
       canvas.style.height = `${height}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      if (blobs.length === 0) {
-        blobs = colors.map((color, i) => ({
+      // Recreate blobs on resize so motion stays visible
+      blobs = colors.map((color, i) => {
+        const speed = 1.1 + i * 0.25;
+        return {
           x: (width * (i + 1)) / (colors.length + 1),
-          y: height * (0.25 + (i % 3) * 0.2),
-          r: Math.max(width, height) * (0.28 + (i % 3) * 0.06),
-          vx: (0.35 + i * 0.08) * (i % 2 === 0 ? 1 : -1),
-          vy: (0.25 + i * 0.05) * (i % 2 === 0 ? -1 : 1),
+          y: height * (0.2 + (i % 3) * 0.22),
+          r: Math.max(width, height) * (0.32 + (i % 3) * 0.05),
+          vx: speed * (i % 2 === 0 ? 1 : -1),
+          vy: (speed * 0.7) * (i % 3 === 0 ? -1 : 1),
           color,
-        }));
-      }
+        };
+      });
     };
 
     const paint = () => {
@@ -115,12 +113,8 @@ export default function AuroraBackground() {
 
     resize();
     window.addEventListener("resize", resize);
-
-    if (reduceMotion) {
-      paint();
-    } else {
-      raf = window.requestAnimationFrame(tick);
-    }
+    // Always animate: ambient decorative motion (visible on Vercel/Safari).
+    raf = window.requestAnimationFrame(tick);
 
     return () => {
       window.removeEventListener("resize", resize);
