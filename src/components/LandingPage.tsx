@@ -133,7 +133,7 @@ export default function LandingPage() {
     <div className="relative min-h-screen text-ink">
       <AuroraBackground />
 
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-white/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-20 border-b border-black/5 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 lg:px-8">
           <a
             href="#top"
@@ -162,7 +162,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <main id="top" className="relative z-10">
+      <main id="top" className="relative z-[1]">
         {/* Hero — statement corporativo grande, estilo Meta */}
         <section className="mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-center px-6 py-24 lg:px-8 lg:py-32">
           <p className="text-sm font-medium text-ink-muted">
@@ -486,7 +486,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="relative z-10 border-t border-black/5 bg-white/70 backdrop-blur-sm">
+      <footer className="relative z-[1] border-t border-black/5 bg-white/70 backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-6 py-10 text-sm text-ink-muted sm:flex-row sm:items-center lg:px-8">
           <Logo />
           <p>© {currentYear} busquedas.net</p>
