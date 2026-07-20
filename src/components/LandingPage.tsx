@@ -314,7 +314,7 @@ export default function LandingPage() {
                 Mauricio Adrián Viola
               </h2>
               <p className="mt-2 text-base font-medium text-ink-muted">
-                Fundador & CEO
+                Fundador & CEO · Growth & Content Creator
               </p>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-muted">
                 Licenciado en Comunicación Social (UNR) y periodista digital
@@ -325,9 +325,10 @@ export default function LandingPage() {
                 países.
               </p>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-muted">
-                Hoy lidera el pivot hacia ingeniería de datos, software de alto
-                rendimiento, automatización con IA y sistemas de comunicación
-                omnicanal.
+                Growth y content creator: combina estrategia de crecimiento con
+                creación de contenido. Hoy lidera el pivot hacia ingeniería de
+                datos, software de alto rendimiento, automatización con IA y
+                sistemas de comunicación omnicanal.
               </p>
             </div>
           </div>
