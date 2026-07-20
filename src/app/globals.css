@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist), "Segoe UI", sans-serif;
+  --color-ink: #1c1e21;
+  --color-ink-muted: #65676b;
+  --color-meta-blue: #0a66ff;
+  --color-surface: #f4f6fa;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-surface text-ink antialiased;
+  }
+
+  ::selection {
+    @apply bg-blue-200 text-ink;
+  }
+}
+
+/* Aurora drift — ritmo corporativo lento tipo Meta */
+@keyframes aurora-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8%, 6%, 0) scale(1.08);
+  }
+}
+
+@keyframes aurora-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-10%, 8%, 0) scale(1.1);
+  }
+}
+
+@keyframes aurora-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, -10%, 0) scale(1.06);
+  }
+}
+
+@keyframes aurora-d {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-5%, -5%, 0) scale(1.12);
+  }
+}
+
+.aurora-blob {
+  will-change: transform;
+}
+
+.aurora-blob-a {
+  animation: aurora-a 18s ease-in-out infinite;
+}
+
+.aurora-blob-b {
+  animation: aurora-b 22s ease-in-out infinite;
+}
+
+.aurora-blob-c {
+  animation: aurora-c 26s ease-in-out infinite;
+}
+
+.aurora-blob-d {
+  animation: aurora-d 20s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob-a,
+  .aurora-blob-b,
+  .aurora-blob-c,
+  .aurora-blob-d {
+    animation: none;
+  }
+}
