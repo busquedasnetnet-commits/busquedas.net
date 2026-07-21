@@ -111,6 +111,8 @@ function LinkCue({ children }: { children: ReactNode }) {
 export default function LandingPage() {
   const [form, setForm] = useState<ContactForm>(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState(false);
 
   const updateField = <K extends keyof ContactForm>(
@@ -120,11 +122,32 @@ export default function LandingPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Consulta técnica:", form);
-    setSubmitted(true);
-    setForm(INITIAL_FORM);
+    setSubmitError(null);
+    setSending(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = (await res.json()) as { error?: string };
+
+      if (!res.ok) {
+        setSubmitError(data.error || "No se pudo enviar. Intentá de nuevo.");
+        return;
+      }
+
+      setSubmitted(true);
+      setForm(INITIAL_FORM);
+    } catch {
+      setSubmitError("Error de conexión. Intentá de nuevo.");
+    } finally {
+      setSending(false);
+    }
   };
 
   const currentYear = new Date().getFullYear();
@@ -408,7 +431,8 @@ export default function LandingPage() {
                       autoComplete="name"
                       value={form.name}
                       onChange={(e) => updateField("name", e.target.value)}
-                      className="w-full rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue"
+                      disabled={sending}
+                      className="w-full rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue disabled:opacity-60"
                     />
                   </div>
                   <div>
@@ -426,7 +450,8 @@ export default function LandingPage() {
                       autoComplete="email"
                       value={form.email}
                       onChange={(e) => updateField("email", e.target.value)}
-                      className="w-full rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue"
+                      disabled={sending}
+                      className="w-full rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue disabled:opacity-60"
                     />
                   </div>
                   <div>
@@ -442,7 +467,8 @@ export default function LandingPage() {
                       required
                       value={form.service}
                       onChange={(e) => updateField("service", e.target.value)}
-                      className="w-full appearance-none rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue"
+                      disabled={sending}
+                      className="w-full appearance-none rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue disabled:opacity-60"
                     >
                       <option value="" disabled>
                         Seleccioná una opción
@@ -470,14 +496,21 @@ export default function LandingPage() {
                       onChange={(e) =>
                         updateField("description", e.target.value)
                       }
-                      className="w-full resize-y rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue"
+                      disabled={sending}
+                      className="w-full resize-y rounded-xl border border-black/10 bg-[#f4f6fa] px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-meta-blue disabled:opacity-60"
                     />
                   </div>
+                  {submitError && (
+                    <p className="text-sm text-red-600" role="alert">
+                      {submitError}
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className="mt-2 w-full rounded-full bg-meta-blue py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                    disabled={sending}
+                    className="mt-2 w-full rounded-full bg-meta-blue py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    INICIAR CONSULTA TÉCNICA
+                    {sending ? "Enviando..." : "INICIAR CONSULTA TÉCNICA"}
                   </button>
                 </form>
               )}
